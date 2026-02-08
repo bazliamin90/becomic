@@ -47,203 +47,197 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
   <script>
-    
-    // Disable browser restoring scroll
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
 
-    // Always scroll to top at reload
-    window.addEventListener("load", () => {
-      window.scrollTo(0, 0);
-    });
+  window.addEventListener("load", () => {
+    window.scrollTo(0, 0);
+  });
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-    const container = document.getElementById("viewerContainer");
-    const eventBus = new pdfjsViewer.EventBus();
-    const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
-    const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
+  const container = document.getElementById("viewerContainer");
+  const viewerEl = document.getElementById("viewer");
 
-    // Single Page Viewer
-    const viewer = new pdfjsViewer.PDFSinglePageViewer({
-      container,
-      eventBus,
-      linkService,
-      findController,
-      textLayerMode: 2,
-    });
-    linkService.setViewer(viewer);
+  const eventBus = new pdfjsViewer.EventBus();
+  const linkService = new pdfjsViewer.PDFLinkService({ eventBus });
+  const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
 
-    let pdfDoc = null;
+  // 🔽 SCROLL VIEWER
+  const viewer = new pdfjsViewer.PDFViewer({
+    container,
+    viewer: viewerEl,
+    eventBus,
+    linkService,
+    findController,
+    textLayerMode: 2,
+  });
 
-    // --- Namespaced keys per HTML file ---
-    const pageKey = location.pathname.split("/").pop().replace(/\.[^/.]+$/, "");
-    const lastPageKey = pageKey + "_lastPage";
-    const lastZoomKey = pageKey + "_lastZoom";
+  linkService.setViewer(viewer);
 
-    const pageSlider = document.getElementById("pageSlider");
+  let pdfDoc = null;
 
-    // When PDF is fully initialized
-    eventBus.on("pagesinit", () => {
-      // Reset body scroll to top
-      window.scrollTo(0, 0);
+  const pageKey = location.pathname.split("/").pop().replace(/\.[^/.]+$/, "");
+  const lastPageKey = pageKey + "_lastPage";
+  const lastZoomKey = pageKey + "_lastZoom";
 
-      // Restore last zoom
-      let savedZoom = localStorage.getItem(lastZoomKey);
-      if (savedZoom) {
-        viewer.currentScaleValue = savedZoom;
-        document.getElementById("zoomSelect").value = savedZoom;
-      } else {
-        viewer.currentScaleValue = window.innerWidth < 768 ? "page-width" : "auto";
-      }
+  const pageInput = document.getElementById("pageInput");
+  const pageCount = document.getElementById("pageCount");
+  const pageSlider = document.getElementById("pageSlider");
+  const zoomSelect = document.getElementById("zoomSelect");
 
-      document.getElementById("pageCount").textContent = "/" + pdfDoc.numPages;
-      document.getElementById("pageInput").max = pdfDoc.numPages;
-      pageSlider.max = pdfDoc.numPages;
-
-      // Restore last page
-      let savedPage = parseInt(localStorage.getItem(lastPageKey), 10);
-      if (savedPage && savedPage > 0 && savedPage <= pdfDoc.numPages) {
-        viewer.currentPageNumber = savedPage;
-      }
-
-      // Sync input and slider with current page
-      document.getElementById("pageInput").value = viewer.currentPageNumber;
-      pageSlider.value = viewer.currentPageNumber;
-    });
-
-    // When page changes
-    eventBus.on("pagechanging", (e) => {
-      document.getElementById("pageInput").value = e.pageNumber;
-      pageSlider.value = e.pageNumber;
-      localStorage.setItem(lastPageKey, e.pageNumber);
-    });
-
-    async function openPDF(url) {
+  async function openPDF(url) {
+    try {
       const loadingTask = pdfjsLib.getDocument(url);
       pdfDoc = await loadingTask.promise;
+
       viewer.setDocument(pdfDoc);
       linkService.setDocument(pdfDoc, null);
+
+    } catch (err) {
+      console.error("PDF load failed", err);
+      alert("Failed to load PDF");
+    }
+  }
+
+  openPDF(
+    "https://raw.githubusercontent.com/bazliamin90/lib/main/Rate_Wars_The_Standardization_Saga_compressed.pdf"
+  );
+
+  // When pages are ready
+  eventBus.on("pagesinit", () => {
+    window.scrollTo(0, 0);
+
+    // Restore zoom
+    const savedZoom = localStorage.getItem(lastZoomKey);
+    if (savedZoom) {
+      viewer.currentScaleValue = savedZoom;
+      zoomSelect.value = savedZoom;
+    } else {
+      viewer.currentScaleValue = window.innerWidth < 768 ? "page-width" : "auto";
     }
 
-    // Load your PDF file
-    openPDF("https://raw.githubusercontent.com/bazliamin90/lib/main/Rate_Wars_The_Standardization_Saga_compressed.pdf");
+    pageCount.textContent = "/" + pdfDoc.numPages;
+    pageInput.max = pdfDoc.numPages;
+    pageSlider.max = pdfDoc.numPages;
 
-    // Page input jump
-    document.getElementById("pageInput").addEventListener("change", (e) => {
-      let page = parseInt(e.target.value, 10);
-      if (page > 0 && page <= pdfDoc.numPages) {
-        viewer.currentPageNumber = page;
-      } else {
-        e.target.value = viewer.currentPageNumber;
-      }
-    });
+    // Restore page
+    const savedPage = parseInt(localStorage.getItem(lastPageKey), 10);
+    if (savedPage) {
+      viewer.currentPageNumber = savedPage;
+    }
 
-    // Prev button
-    document.getElementById("prevPage").addEventListener("click", () => {
-      if (viewer.currentPageNumber > 1) {
-        viewer.currentPageNumber -= 1;
-      }
-    });
-
-    // Next button
-    document.getElementById("nextPage").addEventListener("click", () => {
-      if (viewer.currentPageNumber < pdfDoc.numPages) {
-        viewer.currentPageNumber += 1;
-      }
-    });
-
-    // Slider navigation
-    pageSlider.addEventListener("input", (e) => {
-      let page = parseInt(e.target.value, 10);
-      if (page > 0 && page <= pdfDoc.numPages) {
-        viewer.currentPageNumber = page;
-      }
-    });
-
-    // Zoom control
-    document.getElementById("zoomSelect").addEventListener("change", (e) => {
-      viewer.currentScaleValue = e.target.value;
-      localStorage.setItem(lastZoomKey, e.target.value);
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (!pdfDoc) return;
-
-      switch (e.key) {
-        case "ArrowLeft": // Prev page
-          if (viewer.currentPageNumber > 1) {
-            viewer.currentPageNumber -= 1;
-          }
-          break;
-        case "ArrowRight": // Next page
-          if (viewer.currentPageNumber < pdfDoc.numPages) {
-            viewer.currentPageNumber += 1;
-          }
-          break;
-        case "+":
-        case "=": { // Zoom in
-          let newScale = viewer.currentScale + 0.25;
-          if (newScale <= 3) {
-            viewer.currentScale = newScale;
-            localStorage.setItem(lastZoomKey, viewer.currentScale);
-          }
-          break;
-        }
-        case "-": { // Zoom out
-          let newScale = viewer.currentScale - 0.25;
-          if (newScale >= 0.5) {
-            viewer.currentScale = newScale;
-            localStorage.setItem(lastZoomKey, viewer.currentScale);
-          }
-          break;
-        }
-      }
-    });
-    // --- Search functions ---
-const searchInput = document.getElementById("searchInput");
-const findPrevBtn = document.getElementById("findPrev");
-const findNextBtn = document.getElementById("findNext");
-
-function doSearch(forward = true) {
-  const query = searchInput.value.trim();
-  if (!query) return;
-
-  eventBus.dispatch("find", {
-    source: this,
-    type: "again",
-    query,
-    caseSensitive: false,
-    highlightAll: true,
-    findPrevious: !forward,
+    pageInput.value = viewer.currentPageNumber;
+    pageSlider.value = viewer.currentPageNumber;
   });
-}
 
-findNextBtn.addEventListener("click", () => doSearch(true));
-findPrevBtn.addEventListener("click", () => doSearch(false));
+  // Track page while scrolling
+  eventBus.on("pagechanging", (e) => {
+    pageInput.value = e.pageNumber;
+    pageSlider.value = e.pageNumber;
+    localStorage.setItem(lastPageKey, e.pageNumber);
+  });
 
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    doSearch(true);
+  // Page input jump
+  pageInput.addEventListener("change", (e) => {
+    const page = parseInt(e.target.value, 10);
+    if (page >= 1 && page <= pdfDoc.numPages) {
+      viewer.currentPageNumber = page;
+    } else {
+      e.target.value = viewer.currentPageNumber;
+    }
+  });
+
+  // Prev / Next
+  document.getElementById("prevPage").addEventListener("click", () => {
+    if (viewer.currentPageNumber > 1) {
+      viewer.currentPageNumber--;
+    }
+  });
+
+  document.getElementById("nextPage").addEventListener("click", () => {
+    if (viewer.currentPageNumber < pdfDoc.numPages) {
+      viewer.currentPageNumber++;
+    }
+  });
+
+  // Slider
+  pageSlider.addEventListener("input", (e) => {
+    viewer.currentPageNumber = parseInt(e.target.value, 10);
+  });
+
+  // Zoom dropdown
+  zoomSelect.addEventListener("change", (e) => {
+    viewer.currentScaleValue = e.target.value;
+    localStorage.setItem(lastZoomKey, e.target.value);
+  });
+
+  // Keyboard shortcuts (safe)
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.target.tagName === "INPUT" ||
+      e.target.tagName === "SELECT" ||
+      e.target.isContentEditable
+    ) return;
+
+    switch (e.key) {
+      case "ArrowUp":
+        viewer.container.scrollBy({ top: -150, behavior: "smooth" });
+        break;
+      case "ArrowDown":
+        viewer.container.scrollBy({ top: 150, behavior: "smooth" });
+        break;
+      case "+":
+      case "=":
+        viewer.currentScale = Math.min(viewer.currentScale + 0.25, 3);
+        localStorage.setItem(lastZoomKey, viewer.currentScale);
+        break;
+      case "-":
+        viewer.currentScale = Math.max(viewer.currentScale - 0.25, 0.5);
+        localStorage.setItem(lastZoomKey, viewer.currentScale);
+        break;
+    }
+  });
+
+  // --- SEARCH ---
+  const searchInput = document.getElementById("searchInput");
+  const findNextBtn = document.getElementById("findNext");
+  const findPrevBtn = document.getElementById("findPrev");
+  const resetBtn = document.getElementById("findReset");
+
+  function doSearch(forward = true) {
+    if (!searchInput) return;
+    const query = searchInput.value.trim();
+    if (!query) return;
+
+    eventBus.dispatch("find", {
+      source: searchInput,
+      type: "again",
+      query,
+      highlightAll: true,
+      findPrevious: !forward,
+    });
   }
-});
-const resetBtn = document.getElementById("findReset");
 
-resetBtn.addEventListener("click", () => {
-  searchInput.value = "";
-  eventBus.dispatch("find", {
-    source: this,
-    type: "again",
-    query: "",
-    caseSensitive: false,
-    highlightAll: false,
-    findPrevious: false,
+  findNextBtn?.addEventListener("click", () => doSearch(true));
+  findPrevBtn?.addEventListener("click", () => doSearch(false));
+
+  searchInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") doSearch(true);
   });
-});
 
-  </script>
+  resetBtn?.addEventListener("click", () => {
+    searchInput.value = "";
+    eventBus.dispatch("find", {
+      source: searchInput,
+      type: "again",
+      query: "",
+      highlightAll: false,
+    });
+  });
+</script>
+
 </body>
 </html>
