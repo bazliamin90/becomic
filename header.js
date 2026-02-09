@@ -218,6 +218,7 @@ h1 a:hover {
 		<li><a href="0004.html">Epidemics 2</a></li>
 		<li><a href="index.html">Prevention</a></li>
         <li><a href="0005.html">Sensitivity, Specificity, Positive Predictive Value, Negative Predictive Value</a></li>
+        <li><a href="0006.html">Sensitivity, Specificity, Positive Predictive Value, Negative Predictive Value 2</a></li>
 		<li><a href="0001.html">Standardization 1</a></li>
 		<li><a href="0003.html">Standardization 2</a></li>
 	
