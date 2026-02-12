@@ -207,7 +207,7 @@ h1 a:hover {
     type="text"
     class="search-box"
     id="search-box"
-    placeholder="Cari topik..."
+    placeholder="Cari komik..."
     aria-label="Search list items"
   />
   <ol id="list">
@@ -216,9 +216,12 @@ h1 a:hover {
 	<hr><b>Epidemiology</b><hr class="hrnone">
 		<li><a href="0002.html">Epidemics 1</a></li>
 		<li><a href="0004.html">Epidemics 2</a></li>
-		<li><a href="index.html">Prevention</a></li>
-        <li><a href="0005.html">Sensitivity, Specificity, Positive Predictive Value, Negative Predictive Value</a></li>
-        <li><a href="0006.html">Sensitivity, Specificity, Positive Predictive Value, Negative Predictive Value 2</a></li>
+        <li><a href="0008.html">Experimental studies</a></li>
+        <li><a href="0007.html">Number needed to treat and harm</a></li>
+		<li><a href="0009.html">P-value vs Confidence Interval</a></li>
+        <li><a href="index.html">Prevention</a></li>
+        <li><a href="0005.html">Sensitivity, Specificity, Positive and Negative Predictive Value</a></li>
+        <li><a href="0006.html">Sensitivity, Specificity, Positive and Negative Predictive Value 2</a></li>
 		<li><a href="0001.html">Standardization 1</a></li>
 		<li><a href="0003.html">Standardization 2</a></li>
 	
