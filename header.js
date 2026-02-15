@@ -227,6 +227,7 @@ h1 a:hover {
 		<li><a href="0003.html">Standardization 2</a></li>
 	
 	<hr><b>Biostatistics</b><hr class="hrnone">
+        <li><a href="0015.html">Correlation</a></li>
         <li><a href="0014.html">Regression</a></li>
         <li><a href="0011.html">Sampling</a></li>
         <li><a href="0013.html">Sampling 2</a></li>
