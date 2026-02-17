@@ -231,6 +231,8 @@ h1 a:hover {
         <li><a href="0014.html">Regression</a></li>
         <li><a href="0011.html">Sampling</a></li>
         <li><a href="0013.html">Sampling 2</a></li>
+        <li><a href="0016.html">Survival analysis</a></li>
+        <li><a href="0017.html">Survival analysis & risk reduction</a></li>
 
     <hr><b>Other</b><hr class="hrnone">
         <li><a href="0012.html">Hadas</a></li>
