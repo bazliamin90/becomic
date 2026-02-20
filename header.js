@@ -216,7 +216,10 @@ h1 a:hover {
 	<hr><b>Epidemiology</b><hr class="hrnone">
 		<li><a href="0002.html">Epidemics 1</a></li>
 		<li><a href="0004.html">Epidemics 2</a></li>
+        <li><a href="0018.html">Epidemiological triad</a></li>
+        <li><a href="0019.html">Epidemiological triad 2</a></li>
         <li><a href="0008.html">Experimental studies</a></li>
+        <li><a href="0020.html">Measures of association</a></li>
         <li><a href="0007.html">Number needed to treat and harm</a></li>
 		<li><a href="0009.html">P-value vs Confidence Interval</a></li>
         <li><a href="index.html">Prevention</a></li>
