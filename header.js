@@ -238,6 +238,8 @@ h1 a:hover {
         <li><a href="0017.html">Survival analysis & risk reduction</a></li>
 
     <hr><b>Other</b><hr class="hrnone">
+        <li><a href="0022.html">Al-baqarah: 183</a></li>
+        <li><a href="0021.html">Fidyah</a></li>
         <li><a href="0012.html">Hadas</a></li>
     
 	</ol>
