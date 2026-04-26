@@ -20,11 +20,10 @@ headerTemplate3.innerHTML = `
 
 /* === Menu Buttons === */
 .menu {
-    max-width: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 8px;
-    padding: 2px;
+    padding: 2px 6px;
     cursor: pointer;
     display: block;
     object-fit: contain;
@@ -132,7 +131,7 @@ h1 a:hover {
 /* === List Section === */
 .scroll-box ol {
     font-family: monospace;
-    margin: 40px 0;
+    margin: 5px 0;
     padding: 0;
     list-style-position: outside;
     padding-left: 2.5em;
@@ -153,7 +152,7 @@ h1 a:hover {
 
 .scroll-box li {
     font-size: 0.95em;
-    padding-bottom: 10px;
+    padding-bottom: 4px;
 }
 
 .hrnone {
@@ -198,7 +197,7 @@ h1 a:hover {
 </style>
 
 <div class="header">
-  <img src="menu.svg" class="menu" alt="Menu Icon"></img>
+  <button class="menu">☰</button>
 </div>
 <div id="overlay"></div>
 <div class="scroll-box" id="scroll-box">
@@ -237,12 +236,16 @@ h1 a:hover {
         <li><a href="0016.html">Survival analysis</a></li>
         <li><a href="0017.html">Survival analysis & risk reduction</a></li>
 
+    <hr><b>Medicine</b><hr class="hrnone">
+        <li><a href="0023.html">Lymphoma</a></li>
+
     <hr><b>Other</b><hr class="hrnone">
         <li><a href="0022.html">Al-baqarah: 183</a></li>
         <li><a href="0021.html">Fidyah</a></li>
         <li><a href="0012.html">Hadas</a></li>
     
 	</ol>
+    <center><p style="font-size: 1em; color: #000000">°❀⋆.ೃ࿔*:･°❀⋆.ೃ࿔*:･</p></center><br><br>
 </div>
 `;
 
@@ -314,15 +317,48 @@ class Header3 extends HTMLElement {
         }
 
         // === Search filter ===
-        searchBox.addEventListener('input', ()=>{
-            const filter = searchBox.value.toLowerCase();
-            list.querySelectorAll('li').forEach(li=>{
-                li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
+        // === Search filter (parent-child aware) ===
+searchBox.addEventListener('input', () => {
+    const filter = searchBox.value.toLowerCase();
+
+    const allItems = list.querySelectorAll('li');
+
+    // Step 1: reset all
+    allItems.forEach(li => li.style.display = 'none');
+
+    // Step 2: process each item
+    allItems.forEach(li => {
+        const text = li.firstChild.textContent.toLowerCase();
+        const matches = text.includes(filter);
+
+        if (filter === '') {
+            li.style.display = '';
+            return;
+        }
+
+        if (matches) {
+            // ✅ Show this item
+            li.style.display = '';
+
+            // ✅ Show ALL children
+            li.querySelectorAll('li').forEach(child => {
+                child.style.display = '';
             });
-            list.querySelectorAll('b, hr').forEach(el=>{
-                el.style.display = filter ? 'none' : '';
-            });
-        });
+
+            // ✅ Show ALL parents
+            let parent = li.parentElement.closest('li');
+            while (parent) {
+                parent.style.display = '';
+                parent = parent.parentElement.closest('li');
+            }
+        }
+    });
+
+    // Hide section headers when searching
+    list.querySelectorAll('b, hr').forEach(el => {
+        el.style.display = filter ? 'none' : '';
+    });
+});
     }
 }
 
