@@ -246,13 +246,18 @@ h1 a:hover {
 
     <hr><b>Research</b><hr class="hrnone">
         <li><a href="0024.html">Baz's Dissertation</a></li>
-        <li><a href="0025.html">Inferential statistics</a></li>
-        <li><a href="0026.html">Selection of statistical tests</a></li>
-        <li><a href="0027.html">Various statistical tests</a></li>
-        <li><a href="0028.html">Correlation</a></li>
-        <li><a href="0029.html">Simple linear regression</a></li>
-        <li><a href="0030.html">Multiple linear regression</a></li>
-	</ol>
+        <li>Prof Sandheep's
+            <ol>
+                <li><a href="0025.html">Inferential statistics</a></li>
+                <li><a href="0026.html">Selection of statistical tests</a></li>
+                <li><a href="0027.html">Various statistical tests</a></li>
+                <li><a href="0028.html">Correlation</a></li>
+                <li><a href="0029.html">Simple linear regression</a></li>
+                <li><a href="0030.html">Multiple linear regression</a></li>
+            </ol>
+        </li>
+    
+    </ol>
     <center><p style="font-size: 1em; color: #000000">°❀⋆.ೃ࿔*:･°❀⋆.ೃ࿔*:･</p></center><br><br>
 </div>
 `;
