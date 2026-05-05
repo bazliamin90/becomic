@@ -206,7 +206,7 @@ h1 a:hover {
     type="text"
     class="search-box"
     id="search-box"
-    placeholder="Cari komik..."
+    placeholder="Cari bahan bacaan..."
     aria-label="Search list items"
   />
   <ol id="list">
@@ -243,7 +243,15 @@ h1 a:hover {
         <li><a href="0022.html">Al-baqarah: 183</a></li>
         <li><a href="0021.html">Fidyah</a></li>
         <li><a href="0012.html">Hadas</a></li>
-    
+
+    <hr><b>Research</b><hr class="hrnone">
+        <li><a href="0024.html">Baz's Dissertation</a></li>
+        <li><a href="0025.html">Inferential statistics</a></li>
+        <li><a href="0026.html">Selection of statistical tests</a></li>
+        <li><a href="0027.html">Various statistical tests</a></li>
+        <li><a href="0028.html">Correlation</a></li>
+        <li><a href="0029.html">Simple linear regression</a></li>
+        <li><a href="0030.html">Multiple linear regression</a></li>
 	</ol>
     <center><p style="font-size: 1em; color: #000000">°❀⋆.ೃ࿔*:･°❀⋆.ೃ࿔*:･</p></center><br><br>
 </div>
