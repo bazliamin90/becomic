@@ -35,13 +35,20 @@
 
     #viewerContainer {
       position: absolute;
-      top: 45px;
+      top: 30px;
       bottom: 0;
       left: 0;
       right: 0;
       overflow: auto;
-      background: #ffffff;
+      background: #b81f1f;
       text-align: center;
+    }
+
+    .pdfViewer {
+      margin: 1rem;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      background-color: black;
+      border-radius: 10px;
     }
 
     #prevPage {
@@ -50,10 +57,9 @@
       left: 2rem;
       transform: translateY(-50%);
       z-index: 999;
-      opacity: 0.7;
-      background-color: yellowgreen;
-      border: 1px solid rgb(197, 197, 197);
-      padding: 20px 4px;
+      background-color: white;
+      border: 3px solid rgb(0, 0, 0);
+      padding: 10px 4px;
       cursor: pointer;
     }
 
@@ -63,10 +69,9 @@
       right: 2rem;
       transform: translateY(-50%);
       z-index: 999;
-      opacity: 0.7;
-      background-color: yellowgreen;
-      border: 1px solid rgb(197, 197, 197);
-      padding: 20px 4px;
+      background-color: white;
+      border: 3px solid rgb(0, 0, 0);
+      padding: 10px 4px;
       cursor: pointer;
     }
    
@@ -79,6 +84,7 @@
     
     #pageSlider {
       width: 80%;
+      accent-color: #b81f1f;
     }
     
     .textLayer ::selection { background: rgb(108, 255, 118); }
