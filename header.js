@@ -254,6 +254,8 @@ h1 a:hover {
                 <li><a href="0028.html">Correlation</a></li>
                 <li><a href="0029.html">Simple linear regression</a></li>
                 <li><a href="0030.html">Multiple linear regression</a></li>
+                <li><a href="0031.html">SPSS 1</a></li>
+                <li><a href="0032.html">SPSS 2</a></li>
             </ol>
         </li>
     
